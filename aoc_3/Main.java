@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Main {
 
+    // Day 3 part 2
     public static void main(String[] args) throws IOException {
 
         String records = Files.readString(Path.of("C:\\Users\\jensg\\Downloads\\input.txt"));
@@ -15,7 +16,7 @@ public class Main {
         while(oxygenRating.size() > 1) {
             int fPlace = place;
             List<String> fOxygenRating = oxygenRating;
-            oxygenRating = oxygenRating.stream().filter(record -> record.substring(fPlace, fPlace + 1).equals(findCommonBit(fOxygenRating, fPlace))).toList();
+            oxygenRating = oxygenRating.stream().filter(record -> record.substring(fPlace, fPlace + 1).equals(findCommonBit(fOxygenRating, fPlace, false))).toList();
             place++;
         }
         List<String> scrubberRating = recordList;
@@ -23,7 +24,7 @@ public class Main {
         while(scrubberRating.size() > 1) {
             int fPlace = place;
             List<String> fScrubberRating = scrubberRating;
-            scrubberRating = scrubberRating.stream().filter(record -> record.substring(fPlace, fPlace + 1).equals(findLeastCommonBit(fScrubberRating, fPlace))).toList();
+            scrubberRating = scrubberRating.stream().filter(record -> record.substring(fPlace, fPlace + 1).equals(findCommonBit(fScrubberRating, fPlace, true))).toList();
             place++;
         }
         int i_oxygenRating = Integer.parseInt(oxygenRating.get(0), 2);
@@ -31,7 +32,7 @@ public class Main {
         System.out.println(i_oxygenRating * i_scrubberRating);
     }
 
-    public static String findLeastCommonBit(List<String> records, int place) {
+    public static String findCommonBit(List<String> records, int place, boolean fewer) {
         int zero, one = zero = 0;
         for (String record : records){
             if(record.substring(place, place + 1).equals("1")) {
@@ -40,18 +41,6 @@ public class Main {
                 zero++;
             }
         }
-        return zero > one ? "1" : "0";
-    }
-
-    public static String findCommonBit(List<String> records, int place) {
-        int zero, one = zero = 0;
-        for (String record : records){
-            if(record.substring(place, place + 1).equals("1")) {
-                one++;
-            } else {
-                zero++;
-            }
-        }
-        return zero > one ? "0" : "1";
+        return fewer ? (zero > one ? "1" : "0")  : (zero > one ? "0" : "1");
     }
 }
